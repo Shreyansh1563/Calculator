@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Scriptable
 
-var screenText: MutableState<String> = mutableStateOf("2+2")
+var screenText: MutableState<String> = mutableStateOf("")
 var isReset = false
 
 @Composable
@@ -90,8 +90,10 @@ fun Calculator(modifier: Modifier = Modifier) {
                 txt = "=",
                 modifier = Modifier.weight(1f),
                 onClick = {
-                    screenText.value =  "=${calculateResult(screenText.value)}"
-                    isReset = true
+                    if(screenText.value!= "" && screenText.value[0] != '=') {
+                        screenText.value = "=${calculateResult(screenText.value)}"
+                        isReset = true
+                    }
                 })
         }
 
@@ -129,7 +131,7 @@ fun CalculatorButton(
 
 fun calculateResult(equation: String): String{
     if(equation[equation.length-1] !in '0'..'9'){
-        return equation
+        return ""
     }
     val context: Context = Context.enter()
     context.optimizationLevel = -1
